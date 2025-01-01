@@ -11,6 +11,12 @@ class BlogSerializer(serializers.ModelSerializer):
         model = Blog
         fields = '__all__'
 
+    def create(self, validated_data):
+        # Automatically set the 'created_by' field to the authenticated user
+        validated_data['created_by'] = self.context['request'].user
+        return super().create(validated_data)
+
+
 class UserCommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCommunity

@@ -11,6 +11,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from blogs.models import Community, UserCommunity, Blog
 from notification.models import Notification
 from notification.serializers import NotificationSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class UserList(APIView):
     def get_permissions(self):
@@ -61,13 +62,12 @@ class UserList(APIView):
 
 class BlogPost(APIView):
     permission_classes = [IsAuthenticated]  # Ensure only authenticated users can post blogs
+    parser_classes = (MultiPartParser, FormParser)  # To handle file uploads
 
     def post(self, request):
-        # The IsAuthenticated permission class will automatically reject unauthenticated users.
-        
         # Prepare the blog post data
-        data = request.data
-        data['created_by'] = request.user.id  # Associate the blog post with the current user
+        data = request.data.copy()  # Copy data to ensure we can modify it
+        data['created_by'] = request.user.id  # Set the created_by field with the current user's ID
         
         # Check if community exists
         community_name = data.get('community')
@@ -77,10 +77,11 @@ class BlogPost(APIView):
         except Community.DoesNotExist:
             return Response({"error": "Community not found"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Validate and save the blog post
-        serializer = BlogSerializer(data=data)
+        # Initialize the serializer with request context
+        serializer = BlogSerializer(data=data, context={'request': request})
+
         if serializer.is_valid():
-            serializer.save()
+            serializer.save()  # Save the blog post with the created_by field populated
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,6 +1,8 @@
 from django.urls import path
 from .views import UserList, BlogPost, EnrollInCommunity, ViewAllBlogsInEnrolledCommunity, GetUserNotifications, MarkNotificationAsRead
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -13,4 +15,4 @@ urlpatterns = [
     path('notifications/mark-as-read/<int:notification_id>/', MarkNotificationAsRead.as_view(), name='mark_notification_as_read'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # Login and obtain token
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # Refresh token
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

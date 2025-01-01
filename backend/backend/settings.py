@@ -15,6 +15,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+IMAGE_DIR = "/Users/utsavsingh/Documents/sarang/bangalore_community_platform/frontend/public/blog_images"
 
 
 # Quick-start development settings - unsuitable for production
@@ -83,27 +84,27 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'abhayt',
-#         'USER': 'postgres',
-#         'PASSWORD': 'password',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DJANGO_DB_NAME', 'abhayt'),
-        'USER': os.getenv('DJANGO_DB_USER', 'postgres'),
-        'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'password'),
-        'HOST': os.getenv('DJANGO_DB_HOST', 'localhost'),
-        'PORT': os.getenv('DJANGO_DB_PORT', '5432'),
+        'NAME': 'abhayt',
+        'USER': 'postgres',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('DJANGO_DB_NAME', 'abhayt'),
+#         'USER': os.getenv('DJANGO_DB_USER', 'postgres'),
+#         'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'password'),
+#         'HOST': os.getenv('DJANGO_DB_HOST', 'localhost'),
+#         'PORT': os.getenv('DJANGO_DB_PORT', '5432'),
+#     }
+# }
 
 
 # Password validation
@@ -165,7 +166,7 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Access token expires in 15 minutes
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=100),  # Access token expires in 15 minutes
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Refresh token expires in 7 days
     'ROTATE_REFRESH_TOKENS': True,  # Whether to rotate refresh tokens
     'BLACKLIST_AFTER_ROTATION': True,  # Blacklist the old refresh token after rotation
@@ -176,3 +177,8 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',  # React frontend
 ]
+
+import os
+
+MEDIA_URL = '/'  # URL prefix for accessing media files
+MEDIA_ROOT = IMAGE_DIR  # Path to store uploaded media files
